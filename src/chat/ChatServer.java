@@ -1,12 +1,13 @@
 package chat;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class ChatServer {
 
@@ -38,6 +39,11 @@ public class ChatServer {
 			(new Thread(this)).start();
 		}
 
+		public void send(String str) throws IOException {
+			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+			dos.writeUTF(str);
+		}
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -47,6 +53,13 @@ public class ChatServer {
 				String str = dr.readUTF();
 				while((str != null && str.length() != 0)) {
 					System.out.println(str);
+					for(Iterator<Client> iter = cClients.iterator(); iter.hasNext();) {
+						Client c = iter.next();
+						if(c != this) {
+							System.out.println("run");
+							c.send(str);
+						}
+					}
 					str = dr.readUTF();
 				}
 				dr.close();
