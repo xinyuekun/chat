@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 
 public class ChatClient {
 
+	//½¨Á¢¿í¾ÅÀï;lkfd
 	Socket s = null;
 	
 	public ChatClient() throws UnknownHostException, IOException {
